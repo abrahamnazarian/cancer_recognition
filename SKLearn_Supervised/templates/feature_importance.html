@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/histogram-bellcurve.js"></script>
+
+</head>
+<body>
+<div id="container"></div> 
+
+
+<div id="container2"></div>
+
+<div id="ROC"></div>
+
+<script type="text/javascript">
+
+Highcharts.chart('container', {
+    chart: {
+        type: 'column'
+    },
+    title: {
+        text: 'Feature Importance'
+    },
+    xAxis: {
+        type: 'category',
+        labels: {
+            rotation: -45,
+            style: {
+                fontSize: '13px',
+                fontFamily: 'Verdana, sans-serif'
+            }
+        }
+    },
+    yAxis: {
+        min: 0,
+        title: {
+            text: 'Importance (Percentage)'
+        }
+    },
+    legend: {
+        enabled: false
+    },
+    tooltip: {
+        pointFormat: 'Importtance: <b>{point.y:.5f} </b>'
+    },
+    series: [{
+        name: 'Importance',
+        data: {{data|safe}},
+        dataLabels: {
+            enabled: true,
+            rotation: -90,
+            color: '#FFFFFF',
+            align: 'right',
+            format: '{point.y:.2f}', // one decimal
+            y: 10, // 10 pixels down from the top
+            style: {
+                fontSize: '13px',
+                fontFamily: 'Verdana, sans-serif'
+            }
+        }
+    }]
+});
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+Highcharts.chart('container2', {
+
+    title: {
+        text: 'Learning Curve - Percentage of Samples vs Prediction score'
+    },
+
+    xAxis: {
+        categories: ['20%','40%','60%','80%']
+    },
+
+    yAxis: {
+        title: {
+            text: 'Prediction score'
+        }
+    },
+    legend: {
+        layout: 'vertical',
+        align: 'right',
+        verticalAlign: 'middle'
+    },
+
+    plotOptions: {
+        series: {
+            label: {
+                connectorAllowed: false
+            },
+        }
+    },
+
+    series: [{
+        name: 'Validation',
+        data: {{valid_scores|safe}}
+    }, {
+        name: 'Traning',
+        data: {{train_scores|safe}}
+    }],
+
+    responsive: {
+        rules: [{
+            condition: {
+                maxWidth: 500
+            },
+            chartOptions: {
+                legend: {
+                    layout: 'horizontal',
+                    align: 'center',
+                    verticalAlign: 'bottom'
+                }
+            }
+        }]
+    }
+
+});
+</script>
+
+
+<script type="text/javascript">
+
+Highcharts.chart('ROC', {
+    chart: {
+        type: 'spline',
+    },
+    title: {
+        text: 'ROC Curve'
+    },
+    xAxis: {
+        title: {
+            enabled: true,
+            text: 'FPR'
+        },
+        labels: {
+            format: '{value} '
+        },
+        maxPadding: 0.2
+    },
+    yAxis: {
+        title: {
+            text: 'TPR'
+        },
+        labels: {
+            format: '{value}°'
+        },
+        lineWidth: 2
+    },
+    legend: {
+        enabled: false
+    },
+    plotOptions: {
+        spline: {
+            marker: {
+                enable: false
+            }
+        }
+    },
+    series: [{
+        name: 'ROC',
+        data: {{roc_data|safe}}
+    }]
+});	
+</script>
+
+
+</body>
+</html>
